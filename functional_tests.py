@@ -40,11 +40,11 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element(By.ID, 'id_list_table')
         rows = table.find_elements(By.TAG_NAME, 'tr')
-        self.assertTrue('1: Buy flowers' , [row.text for row in rows])
+        self.assertIn('1: Buy flowers' , [row.text for row in rows])
 
         #页面中又显示了一个文本框，可以输入其他的待办事项
         #他输入了“gift to his girlfriend”
-        
+
         # 他访问那个URL，发现他的待办事项列表还在
         # 他满意地离开了
         self.fail('Finish the test!')
