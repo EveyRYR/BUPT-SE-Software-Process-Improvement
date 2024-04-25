@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from django.test import LiveServerTestCase
 from selenium.common.exceptions import WebDriverException
+from lists.models import Item
+from django.test import TestCase
 
 MAX_WAIT = 10
 class NewVisitorTest(LiveServerTestCase):
@@ -66,14 +68,15 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_in_list_table('2: Give a gift to Lisi')
         # 他访问那个URL，发现他的待办事项列表还在
         # 他满意地离开了
-        self.fail('Finish the test!')
-    def text_multuple_users_can_start_lists_at_different_urls(self):
+        # self.fail('Finish the test!')
+
+    def test_multuple_users_can_start_lists_at_different_urls(self):
         #张三新建一个待办事项清单
         self.browser.get(self.live_server_url)
         inputbox = self.browser.find_element(By.ID,'id_new_item')
         inputbox.send_keys('Buy flowers')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: Buy Flowers')
+        self.wait_for_row_in_list_table('1: Buy flowers')
         #他注意到清单有个唯一的 URL
         zhangsan_list_url = self.browser.current_url
         self.assertRegex(zhangsan_list_url, '/lists/.+')
