@@ -3,11 +3,13 @@ from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 from selenium.webdriver.common.by import By
-from django.test import LiveServerTestCase
+# from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.common.exceptions import WebDriverException
 
 Max_Wait = 10
 
-class visitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome()
 
@@ -52,7 +54,7 @@ class visitorTest(LiveServerTestCase):
         # 他按了回车键键后，页面更新了
         # 待办事项表格中显示了“1:Buy flowers”
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: Buy flowers')
+        self.wait_for_row_in_list_table('1:Buy flowers')
 
         # 页面中又显示了一个文本输入框，可以输入其他待办事项
         # 他输入了“Send a gift to Lisi”
@@ -61,8 +63,8 @@ class visitorTest(LiveServerTestCase):
         inputbox.send_keys(Keys.ENTER)
 
         # 页面再次更新，她的清单中显示了这两个待办事项
-        self.wait_for_row_in_list_table('1: Buy flowers')
-        self.wait_for_row_in_list_table('2: Give a gift to Lisi')
+        self.wait_for_row_in_list_table('1:Buy flowers')
+        self.wait_for_row_in_list_table('2:Give a gift to Lisi')
 
         # 他满意的离开了
 
@@ -73,7 +75,7 @@ class visitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element(By.ID,'id_new_item')
         inputbox.send_keys('Buy flowers')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: Buy flowers')
+        self.wait_for_row_in_list_table('1:Buy flowers')
 
         # 他注意到清单有一个唯一的URL
         zhangsan_list_url = self.browser.current_url
@@ -95,7 +97,7 @@ class visitorTest(LiveServerTestCase):
         inputbox = self.browser.find_element(By.ID,'id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: Buy milk')
+        self.wait_for_row_in_list_table('1:Buy milk')
 
         # 王五获得了他的唯一URL
         wangwu_list_url = self.browser.current_url
@@ -123,7 +125,7 @@ class visitorTest(LiveServerTestCase):
         #她新建了一个清单，看到输入框仍完美地居中显示
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
+        self.wait_for_row_in_list_table('1:testing')
         inputbox = self.browser.find_element(By.ID,'id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
