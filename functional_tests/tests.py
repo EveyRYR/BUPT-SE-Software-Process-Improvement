@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 from selenium.webdriver.common.by import By
+import os
 # from django.test import LiveServerTestCase
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import WebDriverException
@@ -10,6 +11,13 @@ from selenium.common.exceptions import WebDriverException
 Max_Wait = 10
 
 class NewVisitorTest(StaticLiveServerTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.server_url = os.environ.get('REAL_SERVER')
+        if not cls.server_url:
+            cls.server_url = cls.live_server_url
+
     def setUp(self):
         self.browser = webdriver.Chrome()
 
@@ -33,7 +41,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # 张三听说有一个在线代办事项的应用
         # 他去看了这个应用的首页
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
 
         # 他注意到网页里包含以后“TO -DO”这个词
         self.assertIn('To-Do', self.browser.title)
@@ -88,7 +96,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser = webdriver.Chrome()
 
         # 王五访问首页，首页中没有张三的清单
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element(By.TAG_NAME,'body').text
         self.assertNotIn('Buy flowers',page_text)
         self.assertNotIn('BGive a gift to Lisi',page_text)
@@ -113,7 +121,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def test_layout_and_styling(self):
         #张三访问首页
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024,768)
         #她看到输入框完美地居中显示
         inputbox = self.browser.find_element(By.ID,'id_new_item')
